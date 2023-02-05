@@ -103,7 +103,23 @@ How many rows were processed by the script?
 - 88,605
 - 190,225
 
+Answer:
+    - add git hub block on orion UI
+    - register prefect git: 
+        pip install prefect-github
+        prefect block register -m prefect_github
+    - add deployment script- git_deploy similar to docker script
+        storage = GitHub.load("git-zoomcamp")
+        deployment = Deployment.build_from_flow(
+            flow=etl_web_to_gcs,
+            name="git-example",
+            storage=storage,
+            entrypoint="week_2_workflow_orchestration/homework/etl_web_to_gcs_hw.py:etl_web_to_gcs")
 
+    - run it from shell: python git_deploy.py
+    - Log Excerpt:
+        06:55:18.831 | INFO    | Task run 'clean-2c6af9f6-0' - rows: 88605
+        06:55:18.868 | INFO    | Task run 'clean-2c6af9f6-0' - Finished in state Completed()
 
 ## Question 5. Email or Slack notifications
 
