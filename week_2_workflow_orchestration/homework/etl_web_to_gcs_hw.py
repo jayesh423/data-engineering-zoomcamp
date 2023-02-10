@@ -21,8 +21,8 @@ def clean(df=pd.DataFrame) -> pd.DataFrame:
     # df['tpep_pickup_datetime'] = pd.to_datetime(df['tpep_pickup_datetime'])
     # df['tpep_dropoff_datetime'] = pd.to_datetime(df['tpep_dropoff_datetime'])
 
-    df['lpep_pickup_datetime'] = pd.to_datetime(df['lpep_pickup_datetime'])
-    df['lpep_dropoff_datetime'] = pd.to_datetime(df['lpep_dropoff_datetime'])
+    # df['lpep_pickup_datetime'] = pd.to_datetime(df['lpep_pickup_datetime'])
+    # df['lpep_dropoff_datetime'] = pd.to_datetime(df['lpep_dropoff_datetime'])
 
     print(df.head(2))
     print(f"columns: {df.dtypes}")
@@ -58,8 +58,8 @@ def etl_web_to_gcs():
 
     df = fetch(dataset_url)
     df_clean = clean(df)
-    path = write_local(df_clean, color, dataset_file)
-    write_gcs(path)
+    # path = write_local(df_clean, color, dataset_file)
+    # write_gcs(path)
 
 if __name__ == '__main__':
     etl_web_to_gcs()
