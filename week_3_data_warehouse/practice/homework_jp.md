@@ -69,7 +69,14 @@ Use the BQ table you created earlier in your from clause and note the estimated 
 - 646.25 MB for non-partitioned table and 646.25 MB for the partitioned table
 
 Answer:
+-- uses 2.52GB
+select COUNT(DISTINCT(affiliated_base_number))  from `ny-rides-jpatel.trips_data_all.fhv_tripdata` where pickup_datetime between '2019-03-01' and '2019-03-31'  
 
+-- uses 647.87 MB
+select COUNT(DISTINCT(affiliated_base_number))  from `ny-rides-jpatel.trips_data_all.fhv_tripdata_bq` where pickup_datetime between '2019-03-01' and '2019-03-31' 
+
+-- uses 23.05 MB
+select COUNT(DISTINCT(affiliated_base_number))  from `ny-rides-jpatel.trips_data_all.fhv_tripdata_partitioned_hw` where pickup_datetime between '2019-03-01' and '2019-03-31' 
 
 ## Question 6: 
 Where is the data stored in the External Table you created?
