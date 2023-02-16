@@ -43,6 +43,8 @@ Create a staging model for the fhv data for 2019 and do not add a deduplication 
 Filter records with pickup time in year 2019.
 
 Answer:
+    --43244696
+    select count(9) from `ny-rides-jpatel.dbt_jayesh423.stg_fhv_tripdata` where extract(YEAR FROM pickup_datetime)=2019
 
 ### Question 4: 
 **What is the count of records in the model fact_fhv_trips after running all dependencies with the test run variable disabled (:false)**  
@@ -51,8 +53,13 @@ Create a core model for the stg_fhv_tripdata joining with dim_zones.
 Similar to what we've done in fact_trips, keep only records with known pickup and dropoff locations entries for pickup and dropoff locations. 
 Run it via the CLI without limits (is_test_run: false) and filter records with pickup time in year 2019.
 
+Answer:
+    -- 22998722
+    select count(9) from `ny-rides-jpatel.dbt_jayesh423.fact_fhv_trips` where extract(YEAR FROM pickup_datetime)=2019
+
 ### Question 5: 
 **What is the month with the biggest amount of rides after building a tile for the fact_fhv_trips table**
 Create a dashboard with some tiles that you find interesting to explore the data. One tile should show the amount of trips per month, as done in the videos for fact_trips, based on the fact_fhv_trips table.
 
-
+Answer:
+    January has the biggest amount of rides- 19,849,151. 
