@@ -1,0 +1,59 @@
+gcloud dataproc jobs submit pyspark \
+  --cluster=cluster-de-zoomcamp  \
+  --region=us-east1 \
+  gs://dtc_data_lake_ny-rides-jpatel/code/06_spark_sql-cluster.py \
+  -- \
+      --input_green=gs://dtc_data_lake_ny-rides-jpatel/pq/green/2020/*/ \
+      --input_yellow=gs://dtc_data_lake_ny-rides-jpatel/pq/yellow/2020/*/ \
+      --output=gs://dtc_data_lake_ny-rides-jpatel/report-2020
+
+      --jars=gs://spark-lib/bigquery/spark-bigquery-latest_2.12.jar \
+
+{
+    "reference": {
+      "jobId": "job-1709a0a7",
+      "projectId": "ny-rides-jpatel"
+    },
+    "placement": {
+      "clusterName": "cluster-de-zoomcamp"
+    },
+    "status": {
+      "state": "DONE",
+      "stateStartTime": "2023-02-25T01:30:33.035462Z"
+    },
+    "yarnApplications": [
+      {
+        "name": "test",
+        "state": "FINISHED",
+        "progress": 1,
+        "trackingUrl": "http://cluster-de-zoomcamp-m:8088/proxy/application_1677286289400_0002/"
+      }
+    ],
+    "statusHistory": [
+      {
+        "state": "PENDING",
+        "stateStartTime": "2023-02-25T01:28:37.929050Z"
+      },
+      {
+        "state": "SETUP_DONE",
+        "stateStartTime": "2023-02-25T01:28:37.957542Z"
+      },
+      {
+        "state": "RUNNING",
+        "details": "Agent reported job success",
+        "stateStartTime": "2023-02-25T01:28:38.144116Z"
+      }
+    ],
+    "driverControlFilesUri": "gs://dataproc-staging-us-east1-962256705768-w2rq1qo0/google-cloud-dataproc-metainfo/81a1fbaf-ad33-44ff-988c-228dd9c97fb6/jobs/job-1709a0a7/",
+    "driverOutputResourceUri": "gs://dataproc-staging-us-east1-962256705768-w2rq1qo0/google-cloud-dataproc-metainfo/81a1fbaf-ad33-44ff-988c-228dd9c97fb6/jobs/job-1709a0a7/driveroutput",
+    "jobUuid": "bcdbf5d5-be5a-4ab7-a334-c9c3cf2778dd",
+    "done": true,
+    "pysparkJob": {
+      "mainPythonFileUri": "gs://dtc_data_lake_ny-rides-jpatel/code/06_spark_sql-cluster.py",
+      "args": [
+        "--input_green=gs://dtc_data_lake_ny-rides-jpatel/pq/green/2021/*",
+        "--input_yellow=gs://dtc_data_lake_ny-rides-jpatel/pq/yellow/2021/*",
+        "--output=gs://dtc_data_lake_ny-rides-jpatel/report-2021"
+      ]
+    }
+  }
