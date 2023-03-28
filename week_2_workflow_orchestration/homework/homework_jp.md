@@ -103,7 +103,23 @@ How many rows were processed by the script?
 - 88,605
 - 190,225
 
+Answer:
+    - add git hub block on orion UI
+    - register prefect git: 
+        pip install prefect-github
+        prefect block register -m prefect_github
+    - add deployment script- git_deploy similar to docker script
+        storage = GitHub.load("git-zoomcamp")
+        deployment = Deployment.build_from_flow(
+            flow=etl_web_to_gcs,
+            name="git-example",
+            storage=storage,
+            entrypoint="week_2_workflow_orchestration/homework/etl_web_to_gcs_hw.py:etl_web_to_gcs")
 
+    - run it from shell: python git_deploy.py
+    - Log Excerpt:
+        06:55:18.831 | INFO    | Task run 'clean-2c6af9f6-0' - rows: 88605
+        06:55:18.868 | INFO    | Task run 'clean-2c6af9f6-0' - Finished in state Completed()
 
 ## Question 5. Email or Slack notifications
 
@@ -132,6 +148,20 @@ How many rows were processed by the script?
 - `377,922`
 - `728,390`
 - `514,392`
+
+Answer:
+    - Sign up at https://app.prefect.cloud/ and create a workspace
+    - set up local env to run deploy command:
+        pip install prefect-github
+        pip install prefect-gcp
+        prefect block register -m prefect_github
+        prefect block register -m prefect_gcp
+    - clone git repo 
+    - run deployment and start run
+    - start prefect orion agent
+    - Need to update script for timestamp columns, path, etc
+    - Slack notification: https://temp-notify.slack.com/archives/C04M4NAM67L/p1675631274595899
+    - Email notification is easy to set up as well. 
 
 
 ## Question 6. Secrets

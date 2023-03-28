@@ -35,15 +35,16 @@ def upload_to_gcs(bucket, object_name, local_file):
 
 
 def web_to_gcs(year, service):
-    for i in range(12):
+    for i in range(1,13):
         
         # sets the month part of the file_name string
-        month = '0'+str(i+1)
+        month = '0'+str(i)
         month = month[-2:]
 
         # csv file_name 
         file_name = service + '_tripdata_' + year + '-' + month + '.csv.gz'
 
+        print(f"Reading file: {file_name}")
         init_url=f"https://github.com/DataTalksClub/nyc-tlc-data/releases/download/{service}/"
 
         # download it using requests via a pandas df
@@ -53,12 +54,35 @@ def web_to_gcs(year, service):
 
         if service == 'yellow':
             df.tpep_pickup_datetime=pd.to_datetime(df.tpep_pickup_datetime)
-            df.tpep_dropoff_datetime=pd.to_datetime(df.tpep_dropoff_datetime)
+            df.tpep_dropoff_datetime=pd.to_datetime(df.tpep_dropoff_datetime)            
         elif service == 'green':
             df.lpep_pickup_datetime=pd.to_datetime(df.lpep_pickup_datetime)
             df.lpep_dropoff_datetime=pd.to_datetime(df.lpep_dropoff_datetime)
+
+        # df.passenger_count=pd.to_numeric(df.passenger_count, downcast='signed')       
+        df['passenger_count'].fillna(0, inplace=True)
+        df = df.astype({'passenger_count':'int'})
+
+        df['payment_type'].fillna(0, inplace=True)
+        df = df.astype({'payment_type':'int'})
+
+        df['RatecodeID'].fillna(0, inplace=True)
+        df['PULocationID'].fillna(0, inplace=True)
+        df['DOLocationID'].fillna(0, inplace=True)
+        df['VendorID'].fillna(0, inplace=True)
+        df['trip_type'].fillna(0, inplace=True)
+
+        df = df.astype({'RatecodeID':'int'})
+        df = df.astype({'PULocationID':'int'})
+        df = df.astype({'DOLocationID':'int'})
+        df = df.astype({'VendorID':'int'})
+        df = df.astype({'trip_type':'int'})
+
+
+        # df = df.astype({'Discount':'int'})
+
         print(df.head(2))
-        file_name = file_name.replace('.csv', '.parquet')
+        file_name = file_name.replace('csv.gz', 'parquet')
         df.to_parquet(file_name, engine='pyarrow')
         print(f"Parquet: {file_name}")
 
@@ -66,8 +90,7 @@ def web_to_gcs(year, service):
         upload_to_gcs(BUCKET, f"{service}/{file_name}", file_name)
         print(f"GCS: {service}/{file_name}")
 
-
-# web_to_gcs('2019', 'green')
-# web_to_gcs('2020', 'green')
-web_to_gcs('2019', 'yellow')
-web_to_gcs('2020', 'yellow')
+web_to_gcs('2019', 'green')
+web_to_gcs('2020', 'green')
+# web_to_gcs('2019', 'yellow')
+# web_to_gcs('2020', 'yellow')

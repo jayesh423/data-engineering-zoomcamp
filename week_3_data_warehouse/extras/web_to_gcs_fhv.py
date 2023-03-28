@@ -34,40 +34,48 @@ def upload_to_gcs(bucket, object_name, local_file):
     blob.upload_from_filename(local_file)
 
 
-def web_to_gcs(year, service):
-    for i in range(12):
+def web_to_gcs(year):
+    for i in range(2,13):
         
         # sets the month part of the file_name string
-        month = '0'+str(i+1)
+        month = '0'+str(i)
         month = month[-2:]
 
         # csv file_name 
-        file_name = service + '_tripdata_' + year + '-' + month + '.csv.gz'
+        # file_name = service + '_tripdata_' + year + '-' + month + '.csv.gz'
+        file_name=f"fhv_tripdata_{year}-{month}.csv.gz"
+        print(f"Processing file: {file_name}")
+        init_url="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/fhv/"
 
-        init_url=f"https://github.com/DataTalksClub/nyc-tlc-data/releases/download/{service}/"
+        # init_url=f"https://github.com/DataTalksClub/nyc-tlc-data/releases/download/{service}/"
 
         # download it using requests via a pandas df
         request_url = init_url + file_name
         # read it back into a parquet file
         df=pd.read_csv(request_url)
 
-        if service == 'yellow':
-            df.tpep_pickup_datetime=pd.to_datetime(df.tpep_pickup_datetime)
-            df.tpep_dropoff_datetime=pd.to_datetime(df.tpep_dropoff_datetime)
-        elif service == 'green':
-            df.lpep_pickup_datetime=pd.to_datetime(df.lpep_pickup_datetime)
-            df.lpep_dropoff_datetime=pd.to_datetime(df.lpep_dropoff_datetime)
+        df.pickup_datetime=pd.to_datetime(df.pickup_datetime)
+        df.dropOff_datetime=pd.to_datetime(df.dropOff_datetime)            
+
+        df['PUlocationID'].fillna(0, inplace=True)
+        df = df.astype({'PUlocationID':'int'})
+
+        df['DOlocationID'].fillna(0, inplace=True)
+        df = df.astype({'DOlocationID':'int'})
+
+        df['SR_Flag'].fillna(0, inplace=True)
+        df = df.astype({'SR_Flag':'int'})
+
         print(df.head(2))
-        file_name = file_name.replace('.csv', '.parquet')
+        file_name = file_name.replace('csv.gz', 'parquet')
         df.to_parquet(file_name, engine='pyarrow')
         print(f"Parquet: {file_name}")
 
         # upload it to gcs 
-        upload_to_gcs(BUCKET, f"{service}/{file_name}", file_name)
-        print(f"GCS: {service}/{file_name}")
+        upload_to_gcs(BUCKET, f"fhv/{file_name}", file_name)
+        print(f"GCS: fhv/{file_name}")
 
-
-# web_to_gcs('2019', 'green')
+web_to_gcs('2019')
 # web_to_gcs('2020', 'green')
-web_to_gcs('2019', 'yellow')
-web_to_gcs('2020', 'yellow')
+# web_to_gcs('2019', 'yellow')
+# web_to_gcs('2020', 'yellow')
